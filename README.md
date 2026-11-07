@@ -1,57 +1,107 @@
-# Sistema de Gestión de Incidencias Informáticas
+# Sistema de Incidencias
 
-[![Pruebas de incidencias](https://github.com/frankitoromas-tech/sistema-incidencias/actions/workflows/ci.yml/badge.svg)](https://github.com/frankitoromas-tech/sistema-incidencias/actions/workflows/ci.yml)
+[![CI Status](https://github.com/frankitoromas-tech/sistema-incidencias/actions/workflows/ci.yml/badge.svg)](https://github.com/frankitoromas-tech/sistema-incidencias/actions/workflows/ci.yml)
 
-> **Práctica de Laboratorio N.° 13: Integración Continua con GitHub Actions**  
-> **Curso:** Herramientas de Desarrollo (100000S66T) — Semana 13, Sesión 25  
-> **Institución:** Universidad Tecnológica del Perú (UTP)  
+Repositorio correspondiente a la **Práctica de Laboratorio N.° 13: Integración Continua con GitHub Actions**, desarrollada para el curso **Herramientas de Desarrollo (100000S66T)** en la **Universidad Tecnológica del Perú (UTP)**.
 
 ---
 
-## 👥 Integrantes del Equipo
+## Información del Proyecto
 
-* **Vargas Huamán, Frank Emiliano** — Código: `U23243651`
-* **More Manrique, Renzo José** — Código: `U22228363`
-
----
-
-## 🎯 Propósito del Proyecto
-
-El proyecto **`sistema-incidencias`** es un módulo ligero y robusto desarrollado en Node.js que implementa la validación centralizada de requerimientos e incidentes informáticos para una empresa de servicios TIC. Su función principal es asegurar la integridad referencial y de negocio de cada ticket antes de su inserción en la base de datos o su enrutamiento técnico, garantizando:
-
-1. Código de incidencia alfanumérico no vacío.
-2. Descripción descriptiva válida del fallo reportado.
-3. Clasificación estricta en las tres prioridades normalizadas: `'alta'`, `'media'` o `'baja'`.
+* **Institución:** Universidad Tecnológica del Perú (UTP)
+* **Curso:** Herramientas de Desarrollo (`100000S66T`) — Sección 57524
+* **Docente:** Ing. Jeymi Melanie Valdivia Eguiluz
+* **Apartado en Canvas:** Plan De Trabajo Para Tarea • `vitroglass_system_backend`
+* **Integrantes:**
+  * Frank Emiliano Vargas Huamán (`U23243651`)
+  * Renzo José More Manrique (`U22228363`)
 
 ---
 
-## 🛠️ Procedimiento de Implementación Realizado
+## Descripción y Propósito
 
-1. **Estructura del Proyecto:** Inicialización del proyecto con `package.json` configurando el runner de pruebas nativo de Node.js (`node --test test.js`).
-2. **Desarrollo de la Lógica y Suites de Prueba:** Creación de `incidencias.js` con la función `validarIncidencia(incidencia)` y cobertura de casos borde en `test.js` (`node:test` y `node:assert/strict`).
-3. **Automatización de CI con GitHub Actions:** Creación del workflow en `.github/workflows/ci.yml` con disparadores ante `push` y `pull_request`, aprovisionando contenedores `ubuntu-latest` con Node.js 22.
-4. **Simulación de Falla Controlada (Actividad 4):** Introducción de una inconsistencia en `incidencias.js` admitiendo `'urgente'` en la lista de prioridades, lo que provocó el fallo automático e inmediato de la prueba `rechaza prioridad desconocida` en GitHub Actions.
-5. **Corrección y Paso Exitoso:** Restauración del catálogo cerrado de prioridades (`['alta', 'media', 'baja']`), logrando el 100% de pruebas superadas en el pipeline de CI.
+El proyecto implementa un módulo en Node.js para validar registros de incidencias técnicas en sistemas de soporte de TI. Su objetivo es asegurar que toda incidencia enviada contenga los atributos indispensables antes de ser procesada por el sistema:
 
-Enlace al historial de ejecuciones de GitHub Actions:  
-👉 **[Ver ejecuciones en GitHub Actions](https://github.com/frankitoromas-tech/sistema-incidencias/actions)**
+* Un código identificador en formato texto no vacío.
+* Una descripción clara del problema reportado.
+* Una prioridad válida perteneciente al catálogo cerrado: `alta`, `media` o `baja`.
 
 ---
 
-## 📝 Preguntas Técnicas de Evaluación (Actividad 6)
+## Estructura del Repositorio
+
+```text
+sistema-incidencias/
+├── .github/
+│   └── workflows/
+│       └── ci.yml          # Definición del flujo de CI en GitHub Actions
+├── incidencias.js          # Lógica de validación de incidencias
+├── package.json            # Configuración del proyecto y scripts de ejecución
+├── test.js                 # Casos de prueba unitarios con el runner nativo de Node.js
+└── README.md               # Documentación técnica y respuestas del laboratorio
+```
+
+---
+
+## Ejecución Local
+
+Para reproducir las pruebas en un entorno local con Node.js (v18 o superior):
+
+```bash
+# Ejecutar la suite de pruebas unitarias
+npm test
+```
+
+Salida esperada:
+```text
+✔ acepta una incidencia válida
+✔ rechaza prioridad desconocida
+✔ rechaza descripción vacía
+ℹ tests 3
+ℹ pass 3
+ℹ fail 0
+```
+
+---
+
+## Flujo de Integración Continua (GitHub Actions)
+
+El archivo `.github/workflows/ci.yml` automatiza la verificación de calidad en la nube:
+
+1. **Disparadores (`on`):** Se ejecuta automáticamente ante eventos `push` a cualquier rama y en solicitudes `pull_request`.
+2. **Entorno de ejecución:** Máquina virtual `ubuntu-latest` con Node.js 22.
+3. **Pasos del job:**
+   * Descarga del código fuente vía `actions/checkout@v4`.
+   * Configuración del runtime con `actions/setup-node@v4`.
+   * Ejecución de las pruebas unitarias mediante `npm test`.
+
+Historial de ejecuciones disponible en:  
+[https://github.com/frankitoromas-tech/sistema-incidencias/actions](https://github.com/frankitoromas-tech/sistema-incidencias/actions)
+
+---
+
+## Procedimiento Realizado (Actividades de Laboratorio)
+
+1. **Configuración inicial:** Creación del proyecto Node.js sin dependencias externas pesadas, aprovechando `node:test` y `node:assert/strict`.
+2. **Pipeline de CI:** Configuración del workflow de GitHub Actions y comprobación del primer pase exitoso en la nube (Run #1).
+3. **Simulación de error controlado (Actividad 4):** Se modificó la lista de prioridades válidas en `incidencias.js` para admitir `'urgente'`. Al hacer `push` (commit `c13b442`), la prueba `rechaza prioridad desconocida` falló de inmediato con `AssertionError: true !== false`, deteniendo el workflow en GitHub Actions (Run #2).
+4. **Corrección de la regresión:** Se restauró el catálogo cerrado `['alta', 'media', 'baja']` en el commit `d60e246`. Las pruebas se ejecutaron nuevamente y finalizaron con éxito en 5 segundos (Run #3).
+
+---
+
+## Cuestionario Técnico (Actividad 6)
 
 ### 1. ¿Qué evento activa el workflow?
-El flujo de trabajo se dispara de manera automática ante los eventos **`push`** (cada vez que un desarrollador envía nuevos commits a cualquier rama del repositorio) y **`pull_request`** (al abrir o actualizar una solicitud de fusión hacia ramas protegidas), garantizando que ningún cambio entre sin ser previamente validado.
+El flujo se activa mediante los eventos `push` (al enviar nuevos commits al repositorio) y `pull_request` (al proponer cambios hacia ramas del proyecto). Esto garantiza que cualquier cambio en el código sea evaluado antes de considerarse listo para su integración.
 
 ### 2. ¿Qué verifica la prueba automatizada?
-La suite en `test.js` evalúa tres reglas de negocio esenciales:
-* **Prueba 1:** Acepta correctamente una incidencia con código, descripción y prioridad válida (`'alta'`).
-* **Prueba 2:** Rechaza cualquier prioridad no reconocida o fuera del estándar corporativo (como `'urgente'`).
-* **Prueba 3:** Rechaza incidencias que contengan una descripción vacía o compuesta únicamente de espacios en blanco.
+La suite `test.js` comprueba tres condiciones de negocio:
+* Que una incidencia con código, descripción y prioridad válida sea aceptada correctamente.
+* Que se rechacen prioridades no estandarizadas (por ejemplo, `urgente`).
+* Que se rechacen incidencias cuya descripción esté vacía o compuesta solo de espacios en blanco.
 
 ### 3. ¿Qué diferencia existe entre un commit y una ejecución de Actions?
-* **Commit:** Es una instantánea estática e inmutable en el historial de Git que registra cambios específicos en archivos (código, metadatos, autoría y mensaje descriptivo).
-* **Ejecución de Actions:** Es un entorno de cómputo temporal (runner virtual en la nube) que reacciona ante eventos del repositorio para compilar código, instalar dependencias, ejecutar pruebas y emitir un veredicto dinámico de éxito (`pass`) o fracaso (`fail`).
+Un **commit** es un registro estático en el historial de Git que almacena los cambios realizados sobre los archivos en un momento determinado. Por otro lado, una **ejecución de Actions** es un proceso dinámico en la nube que toma ese commit, levanta un runner virtual, ejecuta los comandos definidos en el flujo (como `npm test`) y genera un veredicto de éxito o fallo.
 
 ### 4. ¿Qué ventaja ofrece detectar un error antes de integrar más cambios?
-Aplica el principio de **Shift-Left Testing**: detectar y subsanar fallas en la etapa más temprana del ciclo de vida del software minimiza exponencialmente el costo de corrección, previene la contaminación de la rama `main` y asegura que el equipo trabaje siempre sobre una versión estable y funcional del sistema.
+Permite identificar fallas de manera inmediata en el momento en que se introducen, evitando que código con errores llegue a ramas principales o a producción. Esto reduce drásticamente el tiempo de depuración, ya que el desarrollador conoce exactamente qué commit causó el problema y puede corregirlo antes de que afecte el trabajo de los demás integrantes del equipo.
